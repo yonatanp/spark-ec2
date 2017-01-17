@@ -24,10 +24,15 @@ $BIN_FOLDER/stop-all.sh
 sleep 2
 
 # Start Master
-$BIN_FOLDER/start-master.sh
+# YP: we don't have to provide SPARK_MASTER_HOST here, but for consistency, we will
+SPARK_MASTER_HOST=$(cat /root/spark-ec2/masters) \
+    $BIN_FOLDER/start-master.sh
 
 # Pause
 sleep 20
 
 # Start Workers
-$BIN_FOLDER/start-slaves.sh
+# YP: we must provide SPARK_MASTER_HOST because the default is `hostname` and this doesn't work with private IPs (or at all)
+SPARK_MASTER_HOST=$(cat /root/spark-ec2/masters) \
+    $BIN_FOLDER/start-slaves.sh
+
